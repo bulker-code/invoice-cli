@@ -128,11 +128,14 @@ def add_invoice_with_items(client_id, issue_date, due_date):
         return
     
     update_invoice_codes(cursor, client_id)
+    
+    cursor.execute("SELECT code from invoices WHERE id = ?", (invoice_id,))
+    inv_code = cursor.fetchone()[0]
 
     conn.commit()
     conn.close()
 
-    print(f"Created invoice {invoice_id}")
+    print(f"Created invoice {invoice_id}, code: {inv_code} ")
     return invoice_id
 
 def remove_client(client_id):
