@@ -7,8 +7,19 @@ from database_functions import get_invoice_data
 from reportlab.lib import colors
 import numpy as np
 import os
-from config_example import YOUR_NAME, YOUR_ADDRESS, YOUR_PHONE, YOUR_EMAIL, YOUR_ABN, YOUR_BANK, YOUR_BSB, YOUR_ACC, BASE_PATH
+from datetime import date
+from config import YOUR_NAME, YOUR_ADDRESS, YOUR_PHONE, YOUR_EMAIL, YOUR_ABN, YOUR_BANK, YOUR_BSB, YOUR_ACC, BASE_PATH
 
+def format_date(date_str):
+    d = date.fromisoformat(date_str)
+    return d.strftime("%d/%m/%Y")
+
+def get_financial_year(issue_date_str):
+    d = date.fromisoformat(issue_date_str)
+    if d.month >= 7:
+        return f"FY{d.year}-{str(d.year + 1)[2:]}"
+    else:
+        return f"FY{d.year - 1}-{str(d.year)[2:]}"                 
 
 def generate_invoice_pdf(invoice_id, output_path=None):
 
@@ -27,10 +38,9 @@ def generate_invoice_pdf(invoice_id, output_path=None):
 
     parts = name.split()
     first, last = parts[0], parts[-1]
+    fy = get_financial_year(issue_date)
 
-    # create folder if it doesn't exist
-    #folder = os.path.join(BASE_PATH, f"INV_{first}_{last}")
-    folder = f"INV_{first}_{last}"
+    folder = os.path.join(BASE_PATH, fy, "Invoices", f"INV_{first}_{last}")
     os.makedirs(folder, exist_ok=True)
 
     if output_path is None:
@@ -55,8 +65,8 @@ def generate_invoice_pdf(invoice_id, output_path=None):
         
     ]
     header_right = [
-        Paragraph(f"Invoice Date: {issue_date}", right),
-        Paragraph(f"Due Date: {due_date}", right),
+        Paragraph(f"Invoice Date: {format_date(issue_date)}", right),
+        Paragraph(f"Due Date: {format_date(due_date)}", right),
         Paragraph(f"ABN: {YOUR_ABN}", right),
         
     ]
@@ -83,7 +93,7 @@ def generate_invoice_pdf(invoice_id, output_path=None):
     # --- client block ---
     story.append(Paragraph(name,    bold))
     story.append(Paragraph(address, normal))
-    story.append(Paragraph(f"P: {phone}", normal))
+    story.append(Paragraph(f"Phone: {phone}", normal))
     story.append(Paragraph(f"Email: {email}", normal))
     story.append(Spacer(1, 18))
 
@@ -101,7 +111,7 @@ def generate_invoice_pdf(invoice_id, output_path=None):
         amount      = float(row[11])
         total      += amount
         items_data.append([
-            item_date,
+            format_date(item_date),
             description,
             f"{quantity:.2f}",
             f"{rate:.2f}",
