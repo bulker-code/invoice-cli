@@ -132,7 +132,7 @@ def add_invoice_with_items(client_id, issue_date, due_date):
     conn.commit()
     conn.close()
 
-    print(f"Created invoice {invoice_id} with line items")
+    print(f"Created invoice {invoice_id}")
     return invoice_id
 
 def remove_client(client_id):
@@ -264,5 +264,3 @@ def backup_database():
     shutil.copy2("invoices.db", backup_name)
     print(f"Backed up to {backup_name}")
 
-
-                  
