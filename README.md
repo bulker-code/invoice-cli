@@ -33,6 +33,18 @@ python invoice_cli.py add-client --name "Jane Smith" --email jane@example.com --
 ```
 python invoice_cli.py remove-client --client-id 1
 ```
+
+**show-clients** - Shows table of all current clients
+
+```
+python invoice_cli.py show-clients
+```
+
+**add-invoice-with-items**
+
+```
+python invoice_cli.py add-invoice-with-items --client-id 1 --issue-date 2026-07-09
+```
 ## Usage: 
 The following are commands:
 
