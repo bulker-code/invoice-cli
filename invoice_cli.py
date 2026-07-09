@@ -33,7 +33,8 @@ p.add_argument("--invoice-id", type=int, required=True)
 
 # mark-paid
 p = subparsers.add_parser("mark-paid")
-p.add_argument("--invoice-id", type=int, required=True)
+p.add_argument("--invoice-code", type=str, required=True)
+p.add_argument("--paid-date", type=date.fromisoformat, required=True)
 
 # show-clients (no extra args needed)
 p = subparsers.add_parser("show-clients")
@@ -51,8 +52,8 @@ p.add_argument("--invoice-id", type=int, required=True)
 
 # show-revenue
 p = subparsers.add_parser("show-revenue")
-p.add_argument("--from-date", required=True)
-p.add_argument("--to-date", required=True)
+p.add_argument("--from-date", type=date.fromisoformat, required=True)
+p.add_argument("--to-date", type=date.fromisoformat , required=True)
 
 # in argparse setup
 p = subparsers.add_parser("generate-invoice")
@@ -77,7 +78,7 @@ elif args.command == "remove-invoice":
     remove_invoice(args.invoice_id)
 
 elif args.command == "mark-paid":
-    mark_paid(args.invoice_id, date.today().isoformat())
+    mark_paid(args.invoice_code, args.paid_date.isoformat())
 
 elif args.command == "show-clients":
     show_clients()
@@ -89,7 +90,7 @@ elif args.command == "show-unpaid-invoices":
     show_unpaid_invoices()
 
 elif args.command == "show-revenue":
-    show_revenue(args.from_date, args.to_date)
+    show_revenue(args.from_date.isoformat(), args.to_date.isoformat())
 
 elif args.command == "show-invoice-items":
     show_invoice_items(args.invoice_id)
