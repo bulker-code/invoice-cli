@@ -12,11 +12,11 @@ A command line invoice management tool for sole traders. Manage clients, create 
 - **Financial year folder organisation** - Auto-creates folder path in destination to categorise invoices by financial year
 
 
-## Requirements: 
+## Requirements
 - Python 3.x
 - pip install reportlab tabulate
 
-## Setup: 
+## Setup
 - Clone the repo from github. 
 - Copy the config_example.py and rename it config.py, and fill in your business details.
 
@@ -85,4 +85,8 @@ python invoice_cli.py calculate-revenue --from-date 2025-07-01 --to-date 2026-06
 
 
 
-File structure: what invoice_cli.py, database_functions.py, pdf_generator.py each do
+## File structure
+**invoice_cli.py** - primary python file holding cli commands. Run this file to use the tool.
+**database_functions.py** - stores all functions where direct interaction with the SQLite database is required
+**pdf_generator.py** - holds function required to generate pdfs
+**config.py** - stores business details for invoices. 
