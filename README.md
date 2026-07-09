@@ -16,9 +16,9 @@ A command line invoice management tool for sole traders. Manage clients, create 
 - Python 3.x
 - pip install reportlab tabulate
 
-Setup: 
-Clone the repo from github. 
-Copy the config_example.py and rename it config.py, and fill in your business details. 
+## Setup: 
+- Clone the repo from github. 
+- Copy the config_example.py and rename it config.py, and fill in your business details. 
 
 Usage: one block per command showing the actual command and what it does
 
