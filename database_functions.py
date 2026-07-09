@@ -203,7 +203,7 @@ def show_unpaid_invoices():
     conn = sqlite3.connect("invoices.db")
     cursor = conn.cursor()
     cursor.execute("""
-    SELECT invoices.id, clients.name, invoices.due_date, SUM(invoice_items.quantity * invoice_items.rate) AS total
+    SELECT invoices.id, invoices.code, clients.name, invoices.due_date, SUM(invoice_items.quantity * invoice_items.rate) AS total
     FROM invoices
     JOIN clients ON invoices.client_id = clients.id
     JOIN invoice_items ON invoice_items.invoice_id = invoices.id
@@ -213,7 +213,7 @@ def show_unpaid_invoices():
     """
     )
     rows = cursor.fetchall()
-    headers = ["Invoice ID", "Client Name", "Due Date", "TOTAL"
+    headers = ["ID", "CODE", "Client Name", "Due Date", "TOTAL"
     ]
     print(tabulate.tabulate(rows, headers=headers, tablefmt='grid'))
 
