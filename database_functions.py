@@ -1,6 +1,7 @@
 import sqlite3
 import tabulate
 import shutil
+from datetime import date
 
 def create_tables():
     conn = sqlite3.connect("invoices.db")
@@ -162,16 +163,16 @@ def remove_invoice(invoice_id):
     conn.close()
     print(f"Invoice {invoice_id} has been removed")
 
-def mark_paid(invoice_id, paid_date):
+def mark_paid(invoice_code, paid_date):
     conn = sqlite3.connect("invoices.db")
     cursor = conn.cursor()
     cursor.execute(
-        "UPDATE invoices SET paid = 1, paid_date = ? WHERE id = ?",
-        (paid_date, invoice_id)
+        "UPDATE invoices SET paid = 1, paid_date = ? WHERE code = ?",
+        (paid_date, invoice_code)
     )
     conn.commit()
     conn.close()
-    print(f"Marked invoice {invoice_id} as paid")
+    print(f"Marked invoice {invoice_code} as paid")
 
 def show_clients():
     conn = sqlite3.connect("invoices.db")
@@ -195,7 +196,7 @@ def show_all_invoices():
     """
     )
     rows = cursor.fetchall()
-    headers = ["Invoice ID", "INV Code", "Client Name", "Issue Date", "TOTAL", "Paid", "Paid_Date"]
+    headers = ["ID", "INV Code", "Client Name", "Issue Date", "TOTAL", "Paid", "Paid_Date"]
     print(tabulate.tabulate(rows, headers=headers, tablefmt="grid"))
 
 def show_unpaid_invoices():
@@ -266,4 +267,3 @@ def backup_database():
     backup_name = f"invoices_backup_{date.today().isoformat()}.db"
     shutil.copy2("invoices.db", backup_name)
     print(f"Backed up to {backup_name}")
-
