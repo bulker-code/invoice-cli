@@ -17,6 +17,7 @@ A command line invoice management tool for small businesses. Manage clients, cre
 ```
 pip install reportlab tabulate
 ```
+
 ## Installation
 
 ```bash
@@ -27,11 +28,6 @@ pip install reportlab tabulate
 1. Copy `config_example.py` to `config.py`
 2. Fill in your business details in `config.py`
 3. Run `python invoice_cli.py --help` to verify the installation
-4. 
-Then copy `config_example.py` to `config.py` and fill in your business details.
-## Setup
-- Clone the repo from github. 
-- Copy the config_example.py and rename it config.py, and fill in your business details.
 
 ## Usage
 
