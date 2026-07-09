@@ -136,7 +136,7 @@ def add_invoice_with_items(client_id, issue_date, due_date):
     conn.commit()
     conn.close()
 
-    print(f"Created invoice {invoice_id}, code: {inv_code} ")
+    print(f"Created invoice. id:{invoice_id}, code: {inv_code} ")
     return invoice_id
 
 def remove_client(client_id):
@@ -217,19 +217,19 @@ def show_unpaid_invoices():
     ]
     print(tabulate.tabulate(rows, headers=headers, tablefmt='grid'))
 
-def show_invoice_items(invoice_id):
+def show_invoice_items(invoice_code):
     conn = sqlite3.connect("invoices.db")
     cursor = conn.cursor()
     cursor.execute("""
-    SELECT invoices.id, clients.name, invoices.due_date, invoice_items.description, invoice_items.quantity, invoice_items.rate, (invoice_items.quantity * invoice_items.rate) as subtotal
+    SELECT invoices.id, invoices.code, clients.name, invoices.due_date, invoice_items.description, invoice_items.quantity, invoice_items.rate, (invoice_items.quantity * invoice_items.rate) as subtotal
     FROM invoices
     JOIN clients ON clients.id = invoices.client_id
     JOIN invoice_items ON invoice_items.invoice_id = invoices.id
-    WHERE invoices.id = ?
-    """, (invoice_id,))
+    WHERE invoices.code = ?
+    """, (invoice_code,))
 
     rows = cursor.fetchall()
-    headers = ["Invoice ID", "Client Name", "Invoice Due Date", "Item Description", "Quantity", "Rate", "SUBTOTAL"]
+    headers = ["ID", "Invoice CODE", "Client Name", "Invoice Due Date", "Item Description", "Quantity", "Rate", "SUBTOTAL"]
     print(tabulate.tabulate(rows, headers=headers, tablefmt="grid"))
 
 def calculate_revenue(from_date, to_date):
@@ -248,15 +248,15 @@ def calculate_revenue(from_date, to_date):
     conn.close
     print(f' The revenue from {from_date} to {to_date} is ${total}')
 
-def get_invoice_data(invoice_id):
+def get_invoice_data(invoice_code):
     conn =sqlite3.connect("invoices.db")
     cursor = conn.cursor()
     cursor.execute("""SELECT clients.name, clients.address, clients.email, clients.phone, invoices.code, invoices.issue_date, invoices.due_date,  invoice_items.item_date, invoice_items.description, invoice_items.quantity, invoice_items.rate, invoice_items.rate * invoice_items.quantity AS subtotal
                    FROM invoices
                    JOIN clients ON clients.id = invoices.client_id
                    JOIN invoice_items ON invoice_items.invoice_id = invoices.id
-                   WHERE invoices.id = ?
-                   """, (invoice_id, ))
+                   WHERE invoices.code = ?
+                   """, (invoice_code, ))
     data = cursor.fetchall()
     conn.commit()
     conn.close()

@@ -48,16 +48,19 @@ p = subparsers.add_parser("show-unpaid-invoices")
 
 # show-invoice-items
 p = subparsers.add_parser("show-invoice-items")
-p.add_argument("--invoice-id", type=int, required=True)
+p.add_argument("--invoice-code", required=True)
 
 # calculate-revenue
 p = subparsers.add_parser("calculate-revenue")
 p.add_argument("--from-date", type=date.fromisoformat, required=True)
 p.add_argument("--to-date", type=date.fromisoformat , required=True)
 
-# in argparse setup
-p = subparsers.add_parser("generate-invoice")
-p.add_argument("--invoice-id", type=int, required=True)
+#backup-database
+p = subparsers.add_parser("backup-database")
+
+# generate-pdf
+p = subparsers.add_parser("generate-pdf")
+p.add_argument("--invoice-code", required=True)
 
 
 args = parser.parse_args()
@@ -69,7 +72,7 @@ elif args.command == "add-invoice-with-items":
     issue_date = args.issue_date    
     due_date = (issue_date + timedelta(days=7)).isoformat()
     invoice_id = add_invoice_with_items(args.client_id, issue_date, due_date)
-    generate_invoice_pdf(invoice_id)
+    generate_invoice_pdf(invoice_code)
 
 elif args.command == "remove-client":
     remove_client(args.client_id)
@@ -93,7 +96,10 @@ elif args.command == "calculate-revenue":
     calculate_revenue(args.from_date.isoformat(), args.to_date.isoformat())
 
 elif args.command == "show-invoice-items":
-    show_invoice_items(args.invoice_id)
+    show_invoice_items(args.invoice_code)
 
 elif args.command == "backup-database":
-    backup_database("invoices.db")
+    backup_database()
+
+elif args.command == "generate-pdf":
+    generate_invoice_pdf(args.invoice_code)

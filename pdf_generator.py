@@ -21,11 +21,11 @@ def get_financial_year(issue_date_str):
     else:
         return f"FY{d.year - 1}-{str(d.year)[2:]}"                 
 
-def generate_invoice_pdf(invoice_id, output_path=None):
+def generate_invoice_pdf(invoice_code, output_path=None):
 
-    rows = get_invoice_data(invoice_id)
+    rows = get_invoice_data(invoice_code)
     if not rows:
-        print(f"No data found for invoice {invoice_id}")
+        print(f"No data found for invoice {invoice_code}")
         return
     
     name        = rows[0][0]
