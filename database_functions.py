@@ -232,7 +232,7 @@ def show_invoice_items(invoice_id):
     headers = ["Invoice ID", "Client Name", "Invoice Due Date", "Item Description", "Quantity", "Rate", "SUBTOTAL"]
     print(tabulate.tabulate(rows, headers=headers, tablefmt="grid"))
 
-def show_revenue(from_date, to_date):
+def calculate_revenue(from_date, to_date):
     conn = sqlite3.connect("invoices.db")
     cursor = conn.cursor()
 
