@@ -48,10 +48,10 @@ python invoice_cli.py show-clients
 python invoice_cli.py add-invoice-with-items --client-id 1 --issue-date 2026-07-09
 ```
 
-**remove-invoice** - Removes invoice by id
+**remove-invoice** - Removes invoice by code
 
 ```
-python invoice_cli.py remove-invoice --invoice-id 1
+python invoice_cli.py remove-invoice --invoice-code 001JS
 ```
 
 **show-all-invoices** - Shows tables of all invoices
@@ -69,7 +69,7 @@ python invoice_cli.py show-unpaid-invoices
 **show-invoice-items** - Display all line items for a specific invoice
 
 ```
-python invoice_cli.py show-invoice-items --invoice-id 1
+python invoice_cli.py show-invoice-items --invoice-code 001JS
 ```
 
 **mark-paid** - Mark an invoice as paid using its invoice code and the date payment was received
