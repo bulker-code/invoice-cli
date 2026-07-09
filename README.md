@@ -14,9 +14,6 @@ A command line invoice management tool for small businesses. Manage clients, cre
 
 ## Requirements
 - Python 3.8+
-```
-pip install reportlab tabulate
-```
 
 ## Installation
 
