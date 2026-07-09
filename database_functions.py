@@ -137,7 +137,7 @@ def add_invoice_with_items(client_id, issue_date, due_date):
     conn.close()
 
     print(f"Created invoice. id:{invoice_id}, code: {inv_code} ")
-    return invoice_id
+    return inv_code
 
 def remove_client(client_id):
     conn = sqlite3.connect("invoices.db")
@@ -151,17 +151,17 @@ def remove_client(client_id):
     conn.close()
     print(f" Client {client_id} has been removed")
 
-def remove_invoice(invoice_id):
+def remove_invoice(invoice_code):
     conn = sqlite3.connect("invoices.db")
     cursor = conn.cursor()
     cursor.execute("PRAGMA foreign_keys = ON")
     cursor.execute("""
     DELETE from invoices
-    WHERE invoices.id = ?
-    """, (invoice_id,))
+    WHERE invoices.code = ?
+    """, (invoice_code,))
     conn.commit()
     conn.close()
-    print(f"Invoice {invoice_id} has been removed")
+    print(f"Invoice {invoice_code} has been removed")
 
 def mark_paid(invoice_code, paid_date):
     conn = sqlite3.connect("invoices.db")

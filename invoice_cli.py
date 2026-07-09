@@ -29,7 +29,7 @@ p.add_argument("--client-id", type=int, required=True)
 
 #remove-invoice
 p=subparsers.add_parser("remove-invoice")
-p.add_argument("--invoice-id", type=int, required=True)
+p.add_argument("--invoice-code", type=int, required=True)
 
 # mark-paid
 p = subparsers.add_parser("mark-paid")
@@ -71,14 +71,14 @@ if args.command == "add-client":
 elif args.command == "add-invoice-with-items":
     issue_date = args.issue_date    
     due_date = (issue_date + timedelta(days=7)).isoformat()
-    invoice_id = add_invoice_with_items(args.client_id, issue_date, due_date)
+    invoice_code = add_invoice_with_items(args.client_id, issue_date, due_date)
     generate_invoice_pdf(invoice_code)
 
 elif args.command == "remove-client":
     remove_client(args.client_id)
 
 elif args.command == "remove-invoice":
-    remove_invoice(args.invoice_id)
+    remove_invoice(args.invoice_code)
 
 elif args.command == "mark-paid":
     mark_paid(args.invoice_code, args.paid_date.isoformat())
