@@ -106,3 +106,4 @@ python invoice_cli.py backup-database
 - **pdf_generator.py** - holds function required to generate pdfs
 - **config.py** - created by user to store business details. Present in gitignore.
 - **config_example.py** - shows example format for config.py
+- **INV_FIRST_LAST** - example client invoice folders
