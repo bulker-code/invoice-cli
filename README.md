@@ -99,6 +99,15 @@ python invoice_cli.py show-unpaid-invoices
 ```
 python invoice_cli.py show-invoice-items --invoice-code 001JS
 ```
+```
++--------+------------+-----------------+---------------------+----------+--------+---------+
+| Inv ID | Client     | Due Date        | Item Description    | Quantity | Rate   | Subtotal|
++========+============+=================+=====================+==========+========+=========+
+|      1 | Jane Smith | 2026-06-08      | Tutoring Session    |      2.0 | $50.00 | $100.00 |
++--------+------------+-----------------+---------------------+----------+--------+---------+
+|      1 | Jane Smith | 2026-06-08      | Travel Reimbursement|      1.0 | $20.00 |  $20.00 |
++--------+------------+-----------------+---------------------+----------+--------+---------+
+```
 
 **mark-paid** - Mark an invoice as paid using its invoice code and the date payment was received
 
