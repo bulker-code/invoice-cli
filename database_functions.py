@@ -96,6 +96,26 @@ def add_client(name, email, phone, address):
     # Close the connection, we're done with it
     conn.close()
 
+def remove_client(client_id):
+    conn = sqlite3.connect("invoices.db")
+    cursor = conn.cursor()
+    cursor.execute("PRAGMA foreign_keys = ON")
+    cursor.execute("""
+    DELETE from clients
+    WHERE clients.id = ?
+    """, (client_id,))
+    conn.commit()
+    conn.close()
+    print(f" Client {client_id} has been removed")
+
+def show_clients():
+    conn = sqlite3.connect("invoices.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name, email, phone, address FROM clients ORDER BY id")
+    rows = cursor.fetchall()
+
+    headers = ["ID", "Name", "Email", "Phone", "Address"]
+    print(tabulate.tabulate(rows, headers=headers, tablefmt="grid"))
 
 def add_invoice_with_items(client_id, issue_date, due_date):
     conn = sqlite3.connect("invoices.db")
@@ -139,18 +159,6 @@ def add_invoice_with_items(client_id, issue_date, due_date):
     print(f"Created invoice. id:{invoice_id}, code: {inv_code} ")
     return inv_code
 
-def remove_client(client_id):
-    conn = sqlite3.connect("invoices.db")
-    cursor = conn.cursor()
-    cursor.execute("PRAGMA foreign_keys = ON")
-    cursor.execute("""
-    DELETE from clients
-    WHERE clients.id = ?
-    """, (client_id,))
-    conn.commit()
-    conn.close()
-    print(f" Client {client_id} has been removed")
-
 def remove_invoice(invoice_code):
     conn = sqlite3.connect("invoices.db")
     cursor = conn.cursor()
@@ -162,26 +170,6 @@ def remove_invoice(invoice_code):
     conn.commit()
     conn.close()
     print(f"Invoice {invoice_code} has been removed")
-
-def mark_paid(invoice_code, paid_date):
-    conn = sqlite3.connect("invoices.db")
-    cursor = conn.cursor()
-    cursor.execute(
-        "UPDATE invoices SET paid = 1, paid_date = ? WHERE code = ?",
-        (paid_date, invoice_code)
-    )
-    conn.commit()
-    conn.close()
-    print(f"Marked invoice {invoice_code} as paid")
-
-def show_clients():
-    conn = sqlite3.connect("invoices.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT id, name, email, phone, address FROM clients ORDER BY id")
-    rows = cursor.fetchall()
-
-    headers = ["ID", "Name", "Email", "Phone", "Address"]
-    print(tabulate.tabulate(rows, headers=headers, tablefmt="grid"))
 
 def show_all_invoices():
     conn = sqlite3.connect("invoices.db")
@@ -232,6 +220,17 @@ def show_invoice_items(invoice_code):
     headers = ["ID", "Invoice CODE", "Client Name", "Invoice Due Date", "Item Description", "Quantity", "Rate", "SUBTOTAL"]
     print(tabulate.tabulate(rows, headers=headers, tablefmt="grid"))
 
+def mark_paid(invoice_code, paid_date):
+    conn = sqlite3.connect("invoices.db")
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE invoices SET paid = 1, paid_date = ? WHERE code = ?",
+        (paid_date, invoice_code)
+    )
+    conn.commit()
+    conn.close()
+    print(f"Marked invoice {invoice_code} as paid")
+
 def total_unpaid(client_id):
     conn = sqlite3.connect("invoices.db")
     cursor = conn.cursor()
@@ -246,8 +245,6 @@ def total_unpaid(client_id):
     total_unpaid = cursor.fetchone()[0]
     conn.close
     print(f"Total of unpaid invoices for client {client_id} is: {total_unpaid}")
-
-    
 
 def calculate_revenue(from_date, to_date):
     conn = sqlite3.connect("invoices.db")
