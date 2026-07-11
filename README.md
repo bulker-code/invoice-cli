@@ -88,6 +88,12 @@ python invoice_cli.py mark-paid --invoice-code 001JS --paid-date 2026-07-09
 python invoice_cli.py calculate-revenue --from-date 2025-07-01 --to-date 2026-06-30
 ```
 
+**total-unpaid** - Shows total of unpaid invoices for a client
+
+```
+python invoice_cli.py total-unpaid --client-id 1
+```
+
 **generate-pdf** - Generates a new pdf for an existing invoice
 
 ```
