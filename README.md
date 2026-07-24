@@ -141,10 +141,14 @@ python invoice_cli.py backup-database
 ```
 
 **export-csv** - Export a csv to show record of invoices
-Exports invoices to a CSV file for reporting or handing off to an accountant — e.g. everything paid within a financial year. Filter with `--paid-only`, `--unpaid-only`, `--client-id`, and date-range flags; with no flags, exports every invoice.
+Exports invoices to a CSV file for reporting or handing off to an accountant — e.g. everything paid within a financial year. With no flags, exports every invoice. Filter down using any combination of:
+- `--paid-only` / `--unpaid-only` - only paid or only unpaid invoices
+- `--client-id` - only invoices for one client
+- `--issue-from` / `--issue-to` - invoices issued within a date range
+- `--paid-from` / `--paid-to` - invoices paid within a date range
 
 ```
-python invoice_cli.py export-csv --paid-only --from-date 2025-07-01 --to-date 2026-06-30
+python invoice_cli.py export-csv --paid-only --paid-from 2025-07-01 --paid-to 2026-06-30
 ```
 
 
