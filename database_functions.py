@@ -285,21 +285,38 @@ def backup_database():
     shutil.copy2("invoices.db", backup_name)
     print(f"Backed up to {backup_name}")
 
-def export_csv():
+def export_csv(paid_only=False, unpaid_only=False, client_id=None):
+    conditions = []
+    params = []
+
+    if paid_only:
+        conditions.append("invoices.paid = 1")
+    elif unpaid_only:
+        conditions.append("invoices.paid = 0")
+
+    if client_id is not None:
+        conditions.append("invoices.client_id = ?")
+        params.append(client_id)
+
+    where_clause = ""
+    if conditions:
+        where_clause = "WHERE " + " AND ".join(conditions)
+
     conn = sqlite3.connect("invoices.db")
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.execute(f"""
         SELECT invoices.code, clients.name, clients.email, invoices.issue_date, SUM(invoice_items.quantity * invoice_items.rate) AS total, invoices.paid, invoices.paid_date
         FROM invoices
         JOIN clients ON invoices.client_id = clients.id
         JOIN invoice_items ON invoice_items.invoice_id = invoices.id
+        {where_clause}
         GROUP BY invoices.id
         ORDER BY invoices.due_date
-        """)
+    """, params)
     rows = cursor.fetchall()
-    #cursor.execute("SUM(invoice_items.quantity * invoice_items.rate) AS total_revenue")
-    #total = cursor.fetchone()
-    export_name = f'Revenue_export_{date.today().isoformat()}.csv'
+    cursor.execute("SELECT SUM(invoice_items.quantity * invoice_items.rate) AS total_revenue FROM invoice_items")
+    total = sum(row[4] for row in rows)
+    export_name = f'revenue_export_{date.today().isoformat()}.csv'
     try:
         with open(export_name, "w", newline="", encoding="utf-8") as csv_file:
             writer = csv.writer(csv_file)
@@ -310,10 +327,13 @@ def export_csv():
 
             # 5. Write all the data rows
             writer.writerows(rows)
+            writer.writerow(['','','','', total])
+            print("Export complete!")
+
     except PermissionError:
-        print("Revenue.csv is open in another program — close it and try again.")
+        print(f"{export_name} is open in another program — close it and try again.")
     conn.commit()
     conn.close()
-    print("Export complete!")
+    
 
     

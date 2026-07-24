@@ -122,4 +122,4 @@ elif args.command == "backup-database":
     backup_database()
 
 elif args.command == "export-csv":
-    export_csv()
+    export_csv(paid_only=args.paid_only, unpaid_only=args.unpaid_only, client_id=args.client_id)
