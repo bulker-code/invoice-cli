@@ -285,7 +285,7 @@ def backup_database():
     shutil.copy2("invoices.db", backup_name)
     print(f"Backed up to {backup_name}")
 
-def export_csv(paid_only=False, unpaid_only=False, client_id=None):
+def export_csv(issue_from=None, issue_to=None, paid_from=None, paid_to=None, paid_only=False, unpaid_only=False, client_id=None):
     conditions = []
     params = []
 
@@ -297,6 +297,16 @@ def export_csv(paid_only=False, unpaid_only=False, client_id=None):
     if client_id is not None:
         conditions.append("invoices.client_id = ?")
         params.append(client_id)
+    
+    if issue_from is not None and issue_to is not None:
+        conditions.append("invoices.issue_date BETWEEN ? AND ?")
+        params.append(issue_from.isoformat())
+        params.append(issue_to.isoformat())
+
+    if paid_from is not None and paid_to is not None:
+        conditions.append("invoices.paid_date BETWEEN ? AND ?")
+        params.append(paid_from.isoformat())
+        params.append(paid_to.isoformat())
 
     where_clause = ""
     if conditions:
@@ -314,7 +324,6 @@ def export_csv(paid_only=False, unpaid_only=False, client_id=None):
         ORDER BY invoices.due_date
     """, params)
     rows = cursor.fetchall()
-    cursor.execute("SELECT SUM(invoice_items.quantity * invoice_items.rate) AS total_revenue FROM invoice_items")
     total = sum(row[4] for row in rows)
     export_name = f'revenue_export_{date.today().isoformat()}.csv'
     try:

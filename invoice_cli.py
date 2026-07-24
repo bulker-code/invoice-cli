@@ -72,9 +72,10 @@ p = subparsers.add_parser("export-csv")
 p.add_argument("--paid-only", action="store_true")
 p.add_argument("--unpaid-only", action="store_true")
 p.add_argument("--client-id", type=int)
-p.add_argument("--from-date", type=date.fromisoformat)
-p.add_argument("--to-date", type=date.fromisoformat)
-
+p.add_argument("--issue-from", type=date.fromisoformat)
+p.add_argument("--issue-to", type=date.fromisoformat)
+p.add_argument("--paid-from", type=date.fromisoformat)
+p.add_argument("--paid-to", type=date.fromisoformat)
 
 args = parser.parse_args()
 
@@ -122,4 +123,4 @@ elif args.command == "backup-database":
     backup_database()
 
 elif args.command == "export-csv":
-    export_csv(paid_only=args.paid_only, unpaid_only=args.unpaid_only, client_id=args.client_id)
+    export_csv(issue_from=args.issue_from, issue_to=args.issue_to, paid_from=args.paid_from, paid_to=args.paid_to, paid_only=args.paid_only, unpaid_only=args.unpaid_only, client_id=args.client_id)
