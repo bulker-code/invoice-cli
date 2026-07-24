@@ -9,3 +9,5 @@ __pycache__/
 !INV_Jane_Smith/**
 !INV_Bob_Jones/
 !INV_Bob_Jones/**
+
+*.csv
