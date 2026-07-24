@@ -145,7 +145,7 @@ Exports invoices to a CSV file for reporting or handing off to an accountant —
 
 ```
 python invoice_cli.py export-csv --paid-only --from-date 2025-07-01 --to-date 2026-06-30
-​```
+```
 
 
 ## File structure
