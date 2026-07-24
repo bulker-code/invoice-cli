@@ -140,6 +140,14 @@ python invoice_cli.py generate-pdf --invoice-code 001JS
 python invoice_cli.py backup-database
 ```
 
+**export-csv** - Export a csv to show record of invoices
+Exports invoices to a CSV file for reporting or handing off to an accountant — e.g. everything paid within a financial year. Filter with `--paid-only`, `--unpaid-only`, `--client-id`, and date-range flags; with no flags, exports every invoice.
+
+```
+python invoice_cli.py export-csv --paid-only --from-date 2025-07-01 --to-date 2026-06-30
+```
+
+
 ## File structure
 - **invoice_cli.py** - primary python file holding cli commands. Run this file to use the tool.
 - **database_functions.py** - stores all functions where direct interaction with the SQLite database is required
